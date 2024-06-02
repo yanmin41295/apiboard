@@ -7,6 +7,7 @@ function add(a: number, b: number) {
 }
 
 let userControllerClient = createClient(UserController);
-let user = await userControllerClient.getUser().header({userId: 1}).post({username: "min"});
+let userController = userControllerClient.getUser()
+let user = await userController.post({username: ""})
 let age = add(user.age, user.age)
 console.log(age)

@@ -1,4 +1,5 @@
 import UserController from "./api/UserController.ts";
+import {promises} from "node:dns";
 
 export interface HeaderParam {
     [key: string]: string | number | boolean;
@@ -28,14 +29,13 @@ export interface ApiSchema<M extends Method,
     description?: string;
     path?: P;
     query?: Q;
-    header?: H;
+    headers?: H;
     body?: B;
     response?: R;
 }
 
 
-export class ParamController<T, P extends PathParam | undefined, Q extends QueryParam | undefined, H extends HeaderParam | undefined,
-    B extends DataObject> {
+export class ParamController<T, P extends PathParam | undefined, Q extends QueryParam | undefined, H extends HeaderParam | undefined> {
     origin: T;
     params: ApiSchema<any, any, any, any, any, any>;
 
@@ -44,19 +44,28 @@ export class ParamController<T, P extends PathParam | undefined, Q extends Query
         this.params = {}
     }
 
-    header(param: H) {
-        this.params.header = param;
-        return this;
-    }
 
-    path(param: P) {
+    setPath(param: P) {
         this.params.path = param;
         return this;
     }
 
-    query(param: Q) {
+    setHeader(param: H) {
+        this.params.headers = param;
+        return this;
+    }
+
+    setQuery(param: Q) {
         this.params.query = param;
         return this;
+    }
+}
+
+
+export class PostParamController<T, P extends PathParam | undefined, Q extends QueryParam | undefined, H extends HeaderParam | undefined,
+    B extends DataObject, R extends DataObject> extends ParamController<T, P, Q, H> {
+    post(body: B): Promise<R> {
+        return {} as Promise<R>;
     }
 }
 
@@ -65,8 +74,6 @@ interface IPost<B extends DataObject, R extends DataObject> {
     post(body: B): Promise<R>
 }
 
-export type PostController<T, P extends PathParam | undefined, Q extends QueryParam | undefined, H extends HeaderParam | undefined,
-    B extends DataObject, R extends DataObject> = ParamController<T, P, Q, H, B> & { post(body: B): Promise<R> }
 
 /*
 class GetParamController<P extends PathParam, Q extends QueryParam, H extends HeaderParam,
@@ -93,7 +100,7 @@ class DeleteParamController<P extends PathParam, Q extends QueryParam, H extends
 
 export type ApiParam<T> = {
     [key in keyof T]: T[key] extends () => ApiSchema<infer M, infer P, infer Q, infer H, infer B, infer R> ?
-        M extends "post" ? (caseDesc?: string) => PostController<T, P, Q, H, B, R> :
+        M extends "post" ? (caseDesc?: string) => PostParamController<T, P, Q, H, B, R> :
             /*   M extends "get" ? () => GetParamController<P, Q, H, B, R> :
                    M extends "put" ? () => PutParamController<P, Q, H, B, R> :
                        M extends "delete" ? () => DeleteParamController<P, Q, H, B, R> :*/

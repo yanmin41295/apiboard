@@ -54,7 +54,7 @@ export function createClient<T>(construct: { new(): T; }): ApiParam<T> {
                 const response = await service.request({
                     method: result.method,
                     url: parseUrl(result.url, paramController.params.path, paramController.params.query),
-                    headers: result.header,
+                    headers: result.headers,
                     data,
                 })
                 return response.data;

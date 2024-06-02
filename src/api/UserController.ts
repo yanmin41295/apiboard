@@ -4,7 +4,7 @@ export default class UserController {
             url: "/user",
             method: "post" as const,
             description: "Get user",
-            header: {
+            headers: {
                 userId: 23
             },
             path: {},
