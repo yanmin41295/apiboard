@@ -5,7 +5,8 @@
   "scripts": {
     "start": "bun run index.ts",
     "test": "vitest",
-    "ui:test": "vitest --ui"
+    "ui:test": "vitest --ui",
+    "bun:debug": "bun --inspect-brk ./src/app.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

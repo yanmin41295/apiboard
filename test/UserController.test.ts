@@ -6,7 +6,6 @@ import {createClient} from "../src/util.ts";
 test('adds 1 + 2 to equal 3', async () => {
     let a: ApiParam<UserController> = createClient(UserController);
     let result = await a.getUser("测试用")
-        .header({userId: 23})
-        .post({username: ""});
+        .header({userId: 23}).post({username: ""});
     expect(result.username).toBe("min")
 })

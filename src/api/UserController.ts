@@ -1,5 +1,3 @@
-import type {PathParam} from "../ApiDef.ts";
-
 export default class UserController {
     getUser() {
         return {
@@ -15,10 +13,10 @@ export default class UserController {
             },
             response: {
                 username: "user",
+                age:23
             }
         }
     }
-
 }
 
 
